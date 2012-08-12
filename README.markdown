@@ -23,3 +23,9 @@ You can use the code in the way whatever you like, but I will be very pleased if
 
 Author:
 Kanglai Qian
+
+#update
+
+1. I upload a visual studio 2010 project setting for the project. Please modify your own system path for opencv 2.4
+
+2. Replace Lab for Luv because of the color converation problem.

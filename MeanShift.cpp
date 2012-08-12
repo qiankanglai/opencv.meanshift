@@ -52,9 +52,10 @@ int MeanShift(const IplImage* img, int **labels)
 	double color_radius2=color_radius*color_radius;
 	int minRegion = 50;
 
-	// use L*u*v
+	// use Lab rather than L*u*v!
+	// since Luv may produce noise points
 	IplImage *result = cvCreateImage(cvGetSize(img),img->depth,img->nChannels);
-	cvCvtColor(img, result, CV_RGB2Luv);
+	cvCvtColor(img, result, CV_RGB2Lab);
 
 	// Step One. Filtering stage of meanshift segmentation
 	// http://rsbweb.nih.gov/ij/plugins/download/Mean_Shift.java
@@ -71,8 +72,8 @@ int MeanShift(const IplImage* img, int **labels)
 			// in the case of 8-bit and 16-bit images R, G and B are converted to floating-point format and scaled to fit 0 to 1 range
 			// http://opencv.willowgarage.com/documentation/c/miscellaneous_image_transformations.html
 			L = L*100/255;
-			U = 354*U/255-134;
-			V = 256*V/255-140;
+			U = U-128;
+			V = V-128;
 			double shift = 5;
 			for (int iters=0;shift > 3 && iters < 100;iters++) 
 			{
@@ -97,8 +98,8 @@ int MeanShift(const IplImage* img, int **labels)
 							U2 = (float)((uchar *)(result->imageData + i2*img->widthStep))[j2*result->nChannels + 1],
 							V2 = (float)((uchar *)(result->imageData + i2*img->widthStep))[j2*result->nChannels + 2];
 						L2 = L2*100/255;
-						U2 = 354*U2/255-134;
-						V2 = 256*V2/255-140;
+						U2 = U2-128;
+						V2 = V2-128;
 
 						double dL = L2 - L;
 						double dU = U2 - U;
@@ -129,16 +130,16 @@ int MeanShift(const IplImage* img, int **labels)
 			}
 
 			L = L*255/100;
-			U = 255*(U+134)/354;
-			V = 255*(V+140)/256;
+			U = U+128;
+			V = V+128;
 			((uchar *)(result->imageData + i*img->widthStep))[j*result->nChannels + 0] = (uchar)L;
 			((uchar *)(result->imageData + i*img->widthStep))[j*result->nChannels + 1] = (uchar)U;
 			((uchar *)(result->imageData + i*img->widthStep))[j*result->nChannels + 2] = (uchar)V;
 		}
 
 		IplImage *tobeshow = cvCreateImage(cvGetSize(img),img->depth,img->nChannels);
-		cvCvtColor(result, tobeshow, CV_Luv2RGB);
-		cvShowImage("MeanShiftFilter",tobeshow);
+		cvCvtColor(result, tobeshow, CV_Lab2RGB);
+		cvSaveImage("filtered.png", tobeshow);
 		cvReleaseImage(&tobeshow);
 
 		// Step Two. Cluster

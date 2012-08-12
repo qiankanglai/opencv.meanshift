@@ -11,8 +11,6 @@ using namespace cv;
 int main(int argc, char* argv[])
 {
 	IplImage *img = cvLoadImage("input.png");
-  cvNamedWindow("MeanShiftFilter",CV_WINDOW_AUTOSIZE);
-  cvNamedWindow("MeanShift",CV_WINDOW_AUTOSIZE);
 
 	// Mean shift
 	int **ilabels = new int *[img->height];
@@ -22,7 +20,7 @@ int main(int argc, char* argv[])
 	CvRNG rng= cvRNG(cvGetTickCount());
 	for(int i=0;i<regionCount;i++)
 		color[i] = cvRandInt(&rng);
-	
+
 	// Draw random color
 	for(int i=0;i<img->height;i++)
 		for(int j=0;j<img->width;j++)
@@ -32,11 +30,12 @@ int main(int argc, char* argv[])
 			((uchar *)(img->imageData + i*img->widthStep))[j*img->nChannels + 1] = (color[cl]>>8)&255;
 			((uchar *)(img->imageData + i*img->widthStep))[j*img->nChannels + 2] = (color[cl]>>16)&255;
 		}
+
+	cvNamedWindow("MeanShift",CV_WINDOW_AUTOSIZE);
 	cvShowImage("MeanShift",img);
 
-  cvWaitKey();
+	cvWaitKey();
 
-	cvDestroyWindow("MeanShiftFilter");
 	cvDestroyWindow("MeanShift");
 
 	cvReleaseImage(&img);
