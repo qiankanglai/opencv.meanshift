@@ -6,7 +6,7 @@ I will try my best to include the origin source for every tiny tool and please c
 Development Environment: [opencv 2.3](https://launchpad.net/~gijzelaar/+archive/opencv2.3), Ubuntu 11.10 amd64, gcc 4.6.1
 Please refer to [here](http://opencv.willowgarage.com/wiki/CompileOpenCVUsingLinux) for details
 
-More information can be found on my [website])http://qiankanglai.me/)
+More information can be found on my [website](http://qiankanglai.me/project/2012/03/19/meanshift/)
 
 #2.Tool detials
 
